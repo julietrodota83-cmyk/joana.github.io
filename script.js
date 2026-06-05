@@ -15,7 +15,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 });
 
 // Scroll reveal
-const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -23,11 +22,11 @@ const observer = new IntersectionObserver((entries) => {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
+}, { threshold: 0.05 });
 
-// Add reveal class to elements dynamically
+// Add reveal class and observe
 document.querySelectorAll('.project-card, .cert-card, .about-grid, .section-title').forEach((el, i) => {
   el.classList.add('reveal');
   el.style.transitionDelay = `${i * 0.07}s`;
+  observer.observe(el);
 });
