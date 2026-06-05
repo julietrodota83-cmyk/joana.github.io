@@ -14,19 +14,25 @@ mobileMenu.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => mobileMenu.classList.remove('open'));
 });
 
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.05 });
+// Scroll reveal — make all visible immediately, then animate on scroll
+const revealEls = document.querySelectorAll('.project-card, .cert-card, .about-grid, .section-title');
 
-// Add reveal class and observe
-document.querySelectorAll('.project-card, .cert-card, .about-grid, .section-title').forEach((el, i) => {
+revealEls.forEach((el, i) => {
   el.classList.add('reveal');
   el.style.transitionDelay = `${i * 0.07}s`;
-  observer.observe(el);
 });
+
+function checkReveal() {
+  revealEls.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+window.addEventListener('scroll', checkReveal);
+window.addEventListener('load', checkReveal);
+// Also run immediately
+checkReveal();
+setTimeout(checkReveal, 300);
