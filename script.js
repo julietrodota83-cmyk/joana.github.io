@@ -31,8 +31,8 @@ function createParticle() {
 }
 setInterval(createParticle, 400);
 
-// Scroll reveal
-const revealEls = document.querySelectorAll('.project-card, .cert-card, .about-grid, .section-title, .about-text, .about-card');
+// Scroll reveal — general
+const revealEls = document.querySelectorAll('.project-card, .cert-card, .section-title');
 revealEls.forEach((el, i) => {
   el.classList.add('reveal');
   el.style.transitionDelay = `${i * 0.06}s`;
@@ -46,11 +46,48 @@ function checkReveal() {
   });
 }
 
+// About section animations
+const aboutHeading = document.querySelector('.about-text h2');
+const aboutParagraphs = document.querySelectorAll('.about-text p');
+const skillTags = document.querySelectorAll('.skill-tag');
+const aboutCard = document.querySelector('.about-card-inner');
+const aboutInfoRows = document.querySelectorAll('.about-info p');
+
+function checkAbout() {
+  const threshold = window.innerHeight - 80;
+
+  if (aboutHeading?.getBoundingClientRect().top < threshold) {
+    aboutHeading.classList.add('visible');
+  }
+
+  aboutParagraphs.forEach((p, i) => {
+    if (p.getBoundingClientRect().top < threshold) {
+      setTimeout(() => p.classList.add('visible'), i * 100);
+    }
+  });
+
+  if (aboutCard?.getBoundingClientRect().top < threshold) {
+    aboutCard.classList.add('visible');
+
+    aboutInfoRows.forEach((row, i) => {
+      setTimeout(() => row.classList.add('visible'), 200 + i * 80);
+    });
+  }
+
+  skillTags.forEach((tag, i) => {
+    if (tag.getBoundingClientRect().top < threshold) {
+      setTimeout(() => tag.classList.add('visible'), i * 50);
+    }
+  });
+}
+
 window.addEventListener('scroll', checkReveal);
-window.addEventListener('load', checkReveal);
+window.addEventListener('scroll', checkAbout);
+window.addEventListener('load', () => { checkReveal(); checkAbout(); });
 checkReveal();
-setTimeout(checkReveal, 300);
-setTimeout(checkReveal, 800);
+checkAbout();
+setTimeout(() => { checkReveal(); checkAbout(); }, 300);
+setTimeout(() => { checkReveal(); checkAbout(); }, 800);
 
 // Active nav highlight on scroll
 const sections = document.querySelectorAll('section[id]');
